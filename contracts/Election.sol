@@ -12,7 +12,7 @@ contract Election {
 
 	//prevent double votes - voter register
 	mapping (string => address) public voterRegistry;
-	address[] public voters;
+	// address[] public voters;
 
 	constructor() public {
 		_addCandidate("Kanye West 001");
@@ -33,6 +33,6 @@ contract Election {
 	function voteCandidate(uint _candidateId, string memory _voterName) public singleVote(_voterName) {
 		candidates[_candidateId].voteCount++;
 		voterRegistry[_voterName] = msg.sender;
-		voters.push(msg.sender);
+		// voters.push(msg.sender);
 	}
 }
