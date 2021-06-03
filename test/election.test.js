@@ -17,7 +17,7 @@ contract("Election", (accounts) => {
 	describe("Confirm the candidate name", async() => {
 		it("should return the data [name, id, voteCount] of a test candidate", async() => {
 			let testCandidate = await election.candidates(1)
-			assert.equal(testCandidate['name'], "Kanye West 001");
+			assert.equal(testCandidate['name'], "Kanye West");
 			assert.equal(testCandidate['id'], 1); 
 			assert.equal(testCandidate['voteCount'], 0);
 		})
@@ -25,11 +25,12 @@ contract("Election", (accounts) => {
 
 	describe("voteCandidate() ", async() => {
 		it("should increase the vote count of test candidate by 1", async() => {
-			await election.voteCandidate("1", "voter1", { from:accounts[0] });
-			let testCandidate = await election.candidates(1)
-			let voter = await election.voterRegistry("voter1");
+			await election.voteCandidate("1", { from:accounts[0] });
+			let testCandidate = await election.candidates(1);
+			let voterAddress = accounts[0];
+			let voted = await election.voterRegistry(voterAddress)
 			assert.equal(testCandidate['voteCount'], 1);
-			assert.equal(voter, accounts[0]);
+			assert.equal(voted, true);
 		})
 	})
 })
