@@ -33,4 +33,4 @@ contract Election {
 		candidates[_candidateId].voteCount++;
 		voterRegistry[_voterName] = msg.sender;
 	}
-}
+} 

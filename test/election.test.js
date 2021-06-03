@@ -18,7 +18,7 @@ contract("Election", (accounts) => {
 		it("should return the data [name, id, voteCount] of a test candidate", async() => {
 			let testCandidate = await election.candidates(1)
 			assert.equal(testCandidate['name'], "Kanye West 001");
-			assert.equal(testCandidate['id'], 1);
+			assert.equal(testCandidate['id'], 1); 
 			assert.equal(testCandidate['voteCount'], 0);
 		})
 	})
