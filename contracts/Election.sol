@@ -24,12 +24,17 @@ contract Election {
 		_;
 	}
 
+	modifier validCandidate(uint _candidateId) {
+		require(_candidateId > 0 && _candidateId <= candidateCount);
+		_;
+	}
+
 	function _addCandidate(string memory _name) private {
 		candidateCount++;
 		candidates[candidateCount] = Candidate(candidateCount, _name, 0);
 	}
 
-	function voteCandidate(uint _candidateId) public singleVote {
+	function voteCandidate(uint _candidateId) public singleVote validCandidate(_candidateId) {
 		candidates[_candidateId].voteCount++;
 		voterRegistry[msg.sender] = true;
 	}
