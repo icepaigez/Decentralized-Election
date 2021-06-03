@@ -26,7 +26,7 @@ contract("Election", (accounts) => {
 	describe("voteCandidate() ", async() => {
 
 		it("should increase the vote count of test candidate by 1", async() => {
-			await election.voteCandidate("1", { from:accounts[0] });
+			await election.voteCandidate(1, { from:accounts[0] });
 			let testCandidate = await election.candidates(1);
 			let voterAddress = accounts[0];
 			let voted = await election.voterRegistry(voterAddress)
@@ -34,14 +34,40 @@ contract("Election", (accounts) => {
 			assert.equal(voted, true);
 		})
 
-		it("should throw an exception for an invalid candidate", async() => {
+		it("should prevent double voting by a single account", async() => {
 			try {
-				let result = await election.voteCandidate("99", { from:accounts[6] });
+				await election.voteCandidate(1, { from:accounts[0] });
+				await election.voteCandidate(2, { from:accounts[0] });
 			} catch (error) {
-				assert(error.message.indexOf('revert') >= 0)
+				assert(error.message.indexOf('revert') >= 0, "error must contain revert")
+
+				let voted = await election.voterRegistry(accounts[0])
+				assert.equal(voted, true);
+
+				let testCandidate = await election.candidates(1);
 				let testCandidate2 = await election.candidates(2);
+				let testCandidate3 = await election.candidates(3);
+				assert.equal(testCandidate['voteCount'].toString(), '1');
 				assert.equal(testCandidate2['voteCount'].toString(), '0');
+				assert.equal(testCandidate3['voteCount'].toString(), '0');
 			}
 		})
-	})
+
+		it("should throw an exception for an invalid candidate", async() => {
+			try {
+				let result = await election.voteCandidate(99, { from:accounts[6] });
+			} catch (error) {
+				assert(error.message.indexOf('revert') >= 0, "error must contain revert")
+				let testCandidate = await election.candidates(1);
+				let testCandidate2 = await election.candidates(2);
+				let testCandidate3 = await election.candidates(3);
+				assert.equal(testCandidate['voteCount'].toString(), '1');
+				assert.equal(testCandidate2['voteCount'].toString(), '0');
+				assert.equal(testCandidate3['voteCount'].toString(), '0');
+
+				let voted = await election.voterRegistry(accounts[6])
+				assert.equal(voted, false);
+			}
+		})
+	}) 
 })
