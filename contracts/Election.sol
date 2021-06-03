@@ -14,9 +14,9 @@ contract Election {
 	mapping (address => bool) public voterRegistry;
 
 	constructor() public {
-		_addCandidate("Kanye West 001");
-		_addCandidate("Dwayne Johnson 002");
-		_addCandidate("Denzel Washington 003");
+		_addCandidate("Kanye West");
+		_addCandidate("Dwayne Johnson");
+		_addCandidate("Denzel Washington");
 	}
 
 	modifier singleVote() {
