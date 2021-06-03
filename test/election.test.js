@@ -24,6 +24,7 @@ contract("Election", (accounts) => {
 	})
 
 	describe("voteCandidate() ", async() => {
+
 		it("should increase the vote count of test candidate by 1", async() => {
 			await election.voteCandidate("1", { from:accounts[0] });
 			let testCandidate = await election.candidates(1);
@@ -31,6 +32,16 @@ contract("Election", (accounts) => {
 			let voted = await election.voterRegistry(voterAddress)
 			assert.equal(testCandidate['voteCount'], 1);
 			assert.equal(voted, true);
+		})
+
+		it("should throw an exception for an invalid candidate", async() => {
+			try {
+				let result = await election.voteCandidate("99", { from:accounts[6] });
+			} catch (error) {
+				assert(error.message.indexOf('revert') >= 0)
+				let testCandidate2 = await election.candidates(2);
+				assert.equal(testCandidate2['voteCount'].toString(), '0');
+			}
 		})
 	})
 })
