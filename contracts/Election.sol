@@ -11,7 +11,7 @@ contract Election {
 	mapping (uint => Candidate) public candidates;
 
 	//prevent double votes - voter register
-	mapping (string => address) public voterRegistry;
+	mapping (address => bool) public voterRegistry;
 
 	constructor() public {
 		_addCandidate("Kanye West 001");
@@ -19,8 +19,8 @@ contract Election {
 		_addCandidate("Denzel Washington 003");
 	}
 
-	modifier singleVote(string memory _voterName) {
-		require(msg.sender != voterRegistry[_voterName]);
+	modifier singleVote() {
+		require(voterRegistry[msg.sender] == false);
 		_;
 	}
 
@@ -29,8 +29,8 @@ contract Election {
 		candidates[candidateCount] = Candidate(candidateCount, _name, 0);
 	}
 
-	function voteCandidate(uint _candidateId, string memory _voterName) public singleVote(_voterName) {
+	function voteCandidate(uint _candidateId) public singleVote {
 		candidates[_candidateId].voteCount++;
-		voterRegistry[_voterName] = msg.sender;
+		voterRegistry[msg.sender] = true;
 	}
 } 
