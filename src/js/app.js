@@ -118,8 +118,11 @@ App = {
       return instance.voteCandidate(candidateId, { from: App.account });
     }).then(function(result) {
       // Wait for votes to update
-      $("#content").hide();
+      // $("#content").hide();
       $("#loader").show();
+      if (instance.voterRegistry(App.account)) {
+        $('form').hide();
+      }
     }).catch(function(err) {
       console.error(err);
     });
