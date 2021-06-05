@@ -120,9 +120,6 @@ App = {
       // Wait for votes to update
       // $("#content").hide();
       $("#loader").show();
-      if (instance.voterRegistry(App.account)) {
-        $('form').hide();
-      }
     }).catch(function(err) {
       console.error(err);
     });

@@ -13,6 +13,8 @@ contract Election {
 	//prevent double votes - voter register
 	mapping (address => bool) public voterRegistry;
 
+	event voteEvent(uint indexed _candidateId);
+
 	constructor() public {
 		_addCandidate("Kanye West");
 		_addCandidate("Dwayne Johnson");
@@ -37,5 +39,6 @@ contract Election {
 	function voteCandidate(uint _candidateId) public singleVote validCandidate(_candidateId) {
 		candidates[_candidateId].voteCount++;
 		voterRegistry[msg.sender] = true;
+		emit voteEvent(_candidateId);
 	}
 } 
