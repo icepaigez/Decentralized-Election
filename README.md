@@ -15,7 +15,7 @@
 This is a simple v0 decentralized application for voting candidates in an election. This version simply allows one vote per account in a MetaMask wallet.
 
 ## Screenshot
-![Example screenshot](.src/images/election.gif)
+![Example screenshot](./img/election.gif)
 
 ## Technologies
 * [Solidity](https://docs.soliditylang.org/en/v0.8.4/) - v0.5.0
