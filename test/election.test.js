@@ -26,12 +26,18 @@ contract("Election", (accounts) => {
 	describe("voteCandidate() ", async() => {
 
 		it("should increase the vote count of test candidate by 1", async() => {
-			await election.voteCandidate(1, { from:accounts[0] });
-			let testCandidate = await election.candidates(1);
+			let candidateId = 1;
+			let txReceipt = await election.voteCandidate(candidateId, { from:accounts[0] });
+			let testCandidate = await election.candidates(candidateId);
 			let voterAddress = accounts[0];
 			let voted = await election.voterRegistry(voterAddress)
 			assert.equal(testCandidate['voteCount'], 1);
 			assert.equal(voted, true);
+
+			//test for the event after a vote is cast
+			assert.equal(txReceipt.logs.length, 1, "an event was triggered")
+			assert.equal(txReceipt.logs[0].event, 'voteEvent', 'the correct event was triggered')
+			assert.equal(txReceipt.logs[0].args._candidateId.toNumber(), candidateId, "the candidate id is correct")
 		})
 
 		it("should prevent double voting by a single account", async() => {
