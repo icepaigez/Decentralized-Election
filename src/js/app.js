@@ -68,8 +68,8 @@ App = {
     // Load account data
     web3.eth.getAccounts(function(err, account) {
       if (err === null) {
-        App.account = account;
-        $("#accountAddress").html("Your Account: " + account);
+        App.account = account[0];
+        $("#accountAddress").html("Your Account: " + account[0]);
       }
     });
 
@@ -99,9 +99,9 @@ App = {
           candidatesSelect.append(candidateOption);
         });
       }
-      // return electionInstance.voters(App.account);
+      return electionInstance.voterRegistry(App.account);
     }).then(function(hasVoted) {
-      // Do not allow a user to vote
+      // Do not allow a user to vote more than once
       if(hasVoted) {
         $('form').hide();
       }
